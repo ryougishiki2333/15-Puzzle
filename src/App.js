@@ -2,13 +2,33 @@ import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
 
-const pieces = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+class Pieces {
+  constructor(val) {
+      this.coordinate = val;
+      this.original = val;
+  }
+  getStyle() {
+      const x = this.coordinate % 4 * 102;
+      const y = ((this.coordinate / 4) >> 0) * 102;
+      return {
+        transform: `translate(${x}px, ${y}px)`
+      }
+  }
+}
+
+const pieces = [];
+
+function initPuzzlePiece() {
+  for (let index = 0; index < 15; index++) {
+    pieces.push(new Pieces(index));
+  }
+}
+
 class PuzzlePiece extends React.Component {
   render() {
-    const mark = this.props.mark;
     return (
-      <div className="cell">
-        {mark}
+      <div className="cell" style={this.props.value.getStyle()}>
+        {this.props.value.original + 1}
       </div>
     );
   }
@@ -18,9 +38,10 @@ class PuzzleGrid extends React.Component {
   render() {
     return (
       <div className="grid">
-        {pieces.map((mark) =>
-          <PuzzlePiece key={mark.toString()} mark={mark} />
-          )}
+        {this.props.value[0]}
+        {this.props.value.map((p) =>
+          <PuzzlePiece key={p.original} value={p} />
+        )};
       </div>
     )
   }
@@ -75,12 +96,15 @@ class Toolbar extends React.Component {
 }
 
 class App extends React.Component {
+  componentDidMount() {
+    initPuzzlePiece();
+  }
   render() {
     return(
       <div className="puzzle">
         <h1>15 Puzzle</h1>
         <Toolbar />
-        <PuzzleGrid />
+        <PuzzleGrid value={pieces}/>
       </div>
     )
   }
