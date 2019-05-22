@@ -16,19 +16,11 @@ class Pieces {
   }
 }
 
-const pieces = [];
-
-function initPuzzlePiece() {
-  for (let index = 0; index < 15; index++) {
-    pieces.push(new Pieces(index));
-  }
-}
-
 class PuzzlePiece extends React.Component {
   render() {
     return (
-      <div className="cell" style={this.props.value.getStyle()}>
-        {this.props.value.original + 1}
+      <div className="cell" style={this.props.item.getStyle()}>
+        {this.props.item.original + 1}
       </div>
     );
   }
@@ -38,9 +30,8 @@ class PuzzleGrid extends React.Component {
   render() {
     return (
       <div className="grid">
-        {this.props.value[0]}
-        {this.props.value.map((p) =>
-          <PuzzlePiece key={p.original} value={p} />
+        {this.props.pieces.map((p) =>
+          <PuzzlePiece key={p.original} item={p} />
         )};
       </div>
     )
@@ -96,15 +87,19 @@ class Toolbar extends React.Component {
 }
 
 class App extends React.Component {
-  componentDidMount() {
-    initPuzzlePiece();
+  constructor(props) {
+    super(props)
+    this.piecesArray = [];
+    for (let index = 0; index < 15; index++) {
+      this.piecesArray.push(new Pieces(index));
+    }
   }
   render() {
     return(
       <div className="puzzle">
         <h1>15 Puzzle</h1>
         <Toolbar />
-        <PuzzleGrid value={pieces}/>
+        <PuzzleGrid pieces={this.piecesArray}/>
       </div>
     )
   }
