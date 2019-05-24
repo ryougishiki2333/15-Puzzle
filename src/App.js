@@ -1,5 +1,4 @@
 import React from 'react';
-// import logo from './logo.svg';
 import './App.css';
 
 class Pieces {
@@ -36,16 +35,6 @@ class PuzzlePiece extends React.Component {
 }
 
 class PuzzleGrid extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.hmove = this.hmove.bind(this);
-  //   this.state = {data: 0}
-  // }
-  // hmove(e,index) {
-  //   console.log(index)
-  //   // console.log(e)
-  //   this.setState({data: index})
-  // }
   render() {
     return (
       <div className="grid">
@@ -83,12 +72,6 @@ class DisplayLabel extends React.Component {
 }
 
 class Toolbar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      time: 0,
-    }
-  }
   render() {
     return (
       <div className="bar">
@@ -96,7 +79,7 @@ class Toolbar extends React.Component {
         <DisplayLabel content={this.props.step}>
           <i className="fas fa-shoe-prints" />
         </DisplayLabel>
-        <DisplayLabel content={this.state.time}>
+        <DisplayLabel content={this.props.time}>
           <i className="fas fa-clock" />
         </DisplayLabel>
       </div>
@@ -111,8 +94,10 @@ class App extends React.Component {
       piecesArray: initPiecesArray(),
       emptyCoordinate: 15,
       step: 0,
-      isEnd: true,
+      time: 0,
+      isEnd: true
     };
+    this.stopTimer = this.stopTimer.bind(this);
     this.initGame = this.initGame.bind(this);
     this.newGame = this.newGame.bind(this);
     this.shufflePuzzle = this.shufflePuzzle.bind(this);
@@ -123,17 +108,22 @@ class App extends React.Component {
     this.showMessage = this.showMessage.bind(this);
     this.checkWin = this.checkWin.bind(this);
   }
+  stopTimer() {
+    clearInterval(this.timer);
+    this.timer = 0;
+
+  }
   initGame() {
-    this.setState((state) => {
-      return {
-        piecesArray: initPiecesArray(),
-        emptyCoordinate: 15,
-        step: 0,
-        isEnd: false,
-        isTimerOn: false
-      }
+    this.stopTimer();
+    this.setState({
+      piecesArray: initPiecesArray(),
+      emptyCoordinate: 15,
+      time: 0,
+      step: 0,
+      isEnd: false,
     });
     this.shufflePuzzle();
+    this.timer = setInterval(() => this.setState({time: this.state.time + 1}), 1000);
   }
   newGame() {
     if (this.state.isEnd || window.confirm('New Game?')) this.initGame();
@@ -142,7 +132,6 @@ class App extends React.Component {
     let pNum = 15,
       cell = this.state.piecesArray,
       i = 0;
-      console.log(pNum)
     while (pNum) {
       pNum--;
       i = Math.floor(Math.random() * pNum);
@@ -218,17 +207,14 @@ class App extends React.Component {
     if (this.state.piecesArray.every((p) => p.original === p.coordinate)) {
       this.showMessage('You Win!');
       this.stopTimer();
-      this.setState({
-        isEnd: true
-      });
+      this.setState({isEnd: true});
     }
   }
-
   render() {
     return(
       <div className="puzzle">
         <h1>15 Puzzle</h1>
-        <Toolbar newGame={this.newGame} step={this.state.step} timer={this.state.isTimerOn}/>
+        <Toolbar newGame={this.newGame} step={this.state.step} time={this.state.time}/>
         <PuzzleGrid piecesArrayProps={this.state.piecesArray} movePiece={this.movePiece}/>
       </div>
     )
