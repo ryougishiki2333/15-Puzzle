@@ -97,23 +97,12 @@ class App extends React.Component {
       time: 0,
       isEnd: true
     };
-    this.stopTimer = this.stopTimer.bind(this);
-    this.initGame = this.initGame.bind(this);
-    this.newGame = this.newGame.bind(this);
-    this.shufflePuzzle = this.shufflePuzzle.bind(this);
-    this.movePiece = this.movePiece.bind(this);
-    this.moveSinglePiece = this.moveSinglePiece.bind(this);
-    this.moveDoubleAndTriple = this.moveDoubleAndTriple.bind(this);
-    this.findPuzzleIndex = this.findPuzzleIndex.bind(this);
-    this.showMessage = this.showMessage.bind(this);
-    this.checkWin = this.checkWin.bind(this);
   }
-  stopTimer() {
+  stopTimer = () => {
     clearInterval(this.timer);
     this.timer = 0;
-
   }
-  initGame() {
+  initGame = () => {
     this.stopTimer();
     this.setState({
       piecesArray: initPiecesArray(),
@@ -125,10 +114,10 @@ class App extends React.Component {
     this.shufflePuzzle();
     this.timer = setInterval(() => this.setState({time: this.state.time + 1}), 1000);
   }
-  newGame() {
+  newGame= () => {
     if (this.state.isEnd || window.confirm('New Game?')) this.initGame();
   }
-  shufflePuzzle() {
+  shufflePuzzle = () => {
     let pNum = 15,
       cell = this.state.piecesArray,
       i = 0;
@@ -139,7 +128,7 @@ class App extends React.Component {
     }
     this.setState({piecesArray: cell});
   }
-  movePiece(index) {
+  movePiece = (index) => {
     const cell = this.state.piecesArray,
       iPos = cell[index].coordinate,
       ePos = this.state.emptyCoordinate,
@@ -163,7 +152,7 @@ class App extends React.Component {
       }
     }
   }
-  moveSinglePiece(indexDiff, index) {
+  moveSinglePiece = (indexDiff, index) => {
     const cell = this.state.piecesArray;
     cell[index].coordinate = this.state.emptyCoordinate;
     this.setState((state) => {
@@ -175,7 +164,7 @@ class App extends React.Component {
     });
     this.checkWin();
   }
-  moveDoubleAndTriple(indexDiff, index, moveLength) {
+  moveDoubleAndTriple = (indexDiff, index, moveLength) => {
     const cell = this.state.piecesArray,
       iPos = cell[index].coordinate,
       sign = Math.sign(indexDiff),
@@ -195,15 +184,15 @@ class App extends React.Component {
     });
     this.checkWin();
   }
-  findPuzzleIndex(val) {
+  findPuzzleIndex = (val) => {
     for (let i = 0; i < 15; i++) {
       if (this.state.piecesArray[i].coordinate === val) return i;
     }
   }
-  showMessage(message) {
+  showMessage = (message) => {
     setTimeout(() => alert(message), 600);
   }
-  checkWin() {
+  checkWin = () => {
     if (this.state.piecesArray.every((p) => p.original === p.coordinate)) {
       this.showMessage('You Win!');
       this.stopTimer();
