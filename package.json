@@ -1,7 +1,7 @@
 {
-  "name": "puzzle-react",
+  "name": "15-puzzle",
   "version": "0.1.0",
-  "homepage": "https://map1en.github.io/15-Puzzle-React/",
+  "homepage": "https://map1en.github.io/15-Puzzle/",
   "private": true,
   "dependencies": {
     "gh-pages": "^2.0.1",
