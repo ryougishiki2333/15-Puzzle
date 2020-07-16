@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/15-Puzzle-React/static/css/main.3967eaff.chunk.css",
-    "main.js": "/15-Puzzle-React/static/js/main.6179db64.chunk.js",
-    "main.js.map": "/15-Puzzle-React/static/js/main.6179db64.chunk.js.map",
-    "runtime~main.js": "/15-Puzzle-React/static/js/runtime~main.c71b9a12.js",
-    "runtime~main.js.map": "/15-Puzzle-React/static/js/runtime~main.c71b9a12.js.map",
-    "static/js/2.d6a534e5.chunk.js": "/15-Puzzle-React/static/js/2.d6a534e5.chunk.js",
-    "static/js/2.d6a534e5.chunk.js.map": "/15-Puzzle-React/static/js/2.d6a534e5.chunk.js.map",
-    "index.html": "/15-Puzzle-React/index.html",
-    "precache-manifest.8d7c682eb4bc5a3ae98e51358d0c1951.js": "/15-Puzzle-React/precache-manifest.8d7c682eb4bc5a3ae98e51358d0c1951.js",
-    "service-worker.js": "/15-Puzzle-React/service-worker.js",
-    "static/css/main.3967eaff.chunk.css.map": "/15-Puzzle-React/static/css/main.3967eaff.chunk.css.map"
+    "main.css": "/15-Puzzle/static/css/main.eb752a48.chunk.css",
+    "main.js": "/15-Puzzle/static/js/main.a6b6ce52.chunk.js",
+    "main.js.map": "/15-Puzzle/static/js/main.a6b6ce52.chunk.js.map",
+    "runtime~main.js": "/15-Puzzle/static/js/runtime~main.c0e88bca.js",
+    "runtime~main.js.map": "/15-Puzzle/static/js/runtime~main.c0e88bca.js.map",
+    "static/js/2.d6a534e5.chunk.js": "/15-Puzzle/static/js/2.d6a534e5.chunk.js",
+    "static/js/2.d6a534e5.chunk.js.map": "/15-Puzzle/static/js/2.d6a534e5.chunk.js.map",
+    "index.html": "/15-Puzzle/index.html",
+    "precache-manifest.2140979056144b7c838c6bb9f83c9d72.js": "/15-Puzzle/precache-manifest.2140979056144b7c838c6bb9f83c9d72.js",
+    "service-worker.js": "/15-Puzzle/service-worker.js",
+    "static/css/main.eb752a48.chunk.css.map": "/15-Puzzle/static/css/main.eb752a48.chunk.css.map"
   }
 }
