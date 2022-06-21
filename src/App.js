@@ -1,34 +1,31 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "./App.css";
 
-const piecesNum = 3
 class Pieces {
-  constructor(val) {
+  constructor(val, width) {
     this.coordinate = val;
     this.original = val;
+    this.width = width;
   }
   getStyle() {
-    const x = this.coordinate % piecesNum * 102;
-    const y = ((this.coordinate / piecesNum) >> 0) * 102;
+    const x = (this.coordinate % this.width) * 82;
+    const y = ((this.coordinate / this.width) >> 0) * 82;
     return {
-      transform: `translate(${x}px, ${y}px)`
-    }
+      transform: `translate(${x}px, ${y}px)`,
+    };
   }
 }
-
-function initPiecesArray() {
-  const tmp = [];
-  for (let index = 0; index < (piecesNum * piecesNum -1); index++) {
-    tmp.push(new Pieces(index));
-  }
-  return tmp;
-}
-
 class PuzzlePiece extends React.Component {
   render() {
     const index = this.props.pieces.original;
     return (
-      <div className="cell" style={this.props.pieces.getStyle()} onClick={() => {this.props.movePiece(index)}}>
+      <div
+        className="cell"
+        style={this.props.pieces.getStyle()}
+        onClick={() => {
+          this.props.movePiece(index);
+        }}
+      >
         {index + 1}
       </div>
     );
@@ -38,102 +35,128 @@ class PuzzlePiece extends React.Component {
 class PuzzleGrid extends React.Component {
   render() {
     return (
-      <div className="grid">
-        {this.props.piecesArrayProps.map((p) =>
-          <PuzzlePiece key={p.original} pieces={p} movePiece={this.props.movePiece}/>
-        )};
+      <div
+        className="grid"
+        style={{ width: this.props.width * 82, height: this.props.height * 82 }}
+      >
+        {this.props.piecesArrayProps.map((p) => (
+          <PuzzlePiece
+            key={p.original}
+            pieces={p}
+            movePiece={this.props.movePiece}
+          />
+        ))}
+        ;
       </div>
-    )
+    );
   }
 }
 class App extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      piecesArray: initPiecesArray(),
-      emptyCoordinate: (piecesNum * piecesNum -1),
+      piecesArray: [],
+      emptyCoordinate: 8,
+      width: 3,
+      height: 3,
     };
   }
 
-  componentDidMount(){
-    this.shufflePuzzle();
+  initPiecesArray() {
+    const tmp = [];
+    for (
+      let index = 0;
+      index < this.state.width * this.state.height - 1;
+      index++
+    ) {
+      tmp.push(new Pieces(index, this.state.width));
+    }
+    return tmp;
   }
-  
+
+  componentDidMount() {
+    this.setState({ piecesArray: this.initPiecesArray() }, this.shufflePuzzle);
+  }
+
   shufflePuzzle = () => {
-    let pNum = (piecesNum * piecesNum -1),
-      cell = this.state.piecesArray,
+    this.moveSinglePiece(
+      ((this.state.height * this.state.width - 1) / 2) >> 0,
+      ((this.state.height * this.state.width - 1) / 2) >> 0
+    );
+    let pNum = this.state.width * this.state.height - 1,
+      newPiecesArray = this.state.piecesArray,
       i = 0;
     while (pNum) {
       pNum--;
       i = Math.floor(Math.random() * pNum);
-      [cell[pNum].coordinate, cell[i].coordinate] = [cell[i].coordinate, cell[pNum].coordinate];
+      [newPiecesArray[pNum].coordinate, newPiecesArray[i].coordinate] = [
+        newPiecesArray[i].coordinate,
+        newPiecesArray[pNum].coordinate,
+      ];
     }
-    this.setState({piecesArray: cell});
-  }
+
+    this.setState({ piecesArray: newPiecesArray });
+  };
   movePiece = (index) => {
     const cell = this.state.piecesArray,
       iPos = cell[index].coordinate,
       ePos = this.state.emptyCoordinate,
       indexDiff = ePos - iPos;
-    
-        //vertical
-      if (iPos % piecesNum === ePos % piecesNum) {
-        if (Math.abs(indexDiff / piecesNum) > 1) {
-          this.moveDoubleAndTriple((indexDiff / piecesNum), index, piecesNum);
-        } else if (Math.abs(indexDiff / piecesNum) === 1) {
-          this.moveSinglePiece(iPos, index);
-        }
+
+    //余数相等在同一列
+    if (iPos % this.state.width === ePos % this.state.width) {
+      if (Math.abs(indexDiff / this.state.width) === 1) {
+        this.moveSinglePiece(iPos, index);
       }
-      //horizontal
-      if ((iPos / piecesNum) >> 0 === (ePos / piecesNum) >> 0) {
-        if (Math.abs(indexDiff) > 1) {
-          this.moveDoubleAndTriple(indexDiff, index, 1);
-        } else if (Math.abs(indexDiff) === 1) {
-          this.moveSinglePiece(iPos, index);
-        }
+    }
+    //商向下取整说明在同一行
+    if ((iPos / this.state.width) >> 0 === (ePos / this.state.width) >> 0) {
+      if (Math.abs(indexDiff) === 1) {
+        this.moveSinglePiece(iPos, index);
       }
-    
-  }
-  moveSinglePiece = (indexDiff, index) => {
-    const cell = this.state.piecesArray;
-    cell[index].coordinate = this.state.emptyCoordinate;
+    }
+  };
+  //第一个参数是空格的新位置，第二个参数是要移动的方块的原始编号
+  moveSinglePiece = (newLocation, index) => {
+    const newPiecesArray = this.state.piecesArray;
+    newPiecesArray[index].coordinate = this.state.emptyCoordinate;
+    // 避免state的异步性导致取值问题
     this.setState((state) => {
       return {
-        piecesArray: cell,
-        emptyCoordinate: indexDiff,
-      }
+        piecesArray: newPiecesArray,
+        emptyCoordinate: newLocation,
+      };
     });
-  }
-  moveDoubleAndTriple = (indexDiff, index, moveLength) => {
-    const cell = this.state.piecesArray,
-      iPos = cell[index].coordinate,
-      sign = Math.sign(indexDiff),
-      indexTmp = [];
-    for (let i = 0; i < Math.abs(indexDiff); i++) {
-      indexTmp.push(this.findPuzzleIndex(iPos + sign * moveLength * i));
-    }
-    for (const index of indexTmp) {
-      cell[index].coordinate += moveLength * sign;
-    }
-    this.setState((state) => {
-      return {
-        piecesArray: cell,
-        emptyCoordinate: iPos,
-      }
-    });
-  }
-  findPuzzleIndex = (val) => {
-    for (let i = 0; i < (piecesNum * piecesNum -1); i++) {
-      if (this.state.piecesArray[i].coordinate === val) return i;
-    }
-  }
+  };
 
   render() {
-    return(
+    return (
       <div className="puzzle">
-        <PuzzleGrid piecesArrayProps={this.state.piecesArray} movePiece={this.movePiece}/>
+        <PuzzleGrid
+          piecesArrayProps={this.state.piecesArray}
+          movePiece={this.movePiece}
+          width={this.state.width}
+          height={this.state.height}
+        />
+
+        <div className="choose">
+        <label for="width">width</label>
+          <select name="width" id="width">
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="7">7</option>
+            <option value="9">9</option>
+          </select>
+          <label for="height">height</label>
+          <select name="height" id="height">
+            <option value="3">3</option>
+            <option value="5">5</option>
+            <option value="7">7</option>
+            <option value="9">9</option>
+          </select>
+        </div>
       </div>
-    )
+    );
   }
 }
 export default App;
