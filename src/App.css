@@ -3,27 +3,14 @@
   margin: auto;
 }
 
-h1 {
-  font-weight: normal;
-  font-size: 300%;
-  text-align: center;
-  padding: 50px;
-}
-
-.bar {
-  display: flex;
-  justify-content: space-around;
-  margin: 50px auto;
-}
-
 .grid {
   background-color: #373C38;
   margin: 100px auto;
   padding: 1px;
   border-radius: 5px;
   box-shadow: 0px 0px 2px #444;
-  width: 408px;
-  height: 408px;
+  width: 306px;
+  height: 306px;
 }
 
 
@@ -46,46 +33,4 @@ h1 {
 
 .cell:hover {
   background: #E6E6E6;
-}
-
-.button {
-  background-color: #373C38;
-  color: #F6F7F8;
-  border-color: #373C38;
-  border-width: 1px;
-  padding: 0 15px;
-  transition: 0.2s;
-  font-size: x-large;
-  cursor: pointer;
-  user-select: none;
-  box-shadow: 0px 0px 5px #444;
-  height: 40px;
-  line-height: 40px;
-  border-radius: 3px;
-}
-
-.label {
-  font-size: x-large;
-  background-color: #F6F7F8;
-  border-style: solid;
-  border-color: #373C38;
-  border-width: 1px;
-  box-shadow: 0px 0px 5px #444;
-  height: 40px;
-  line-height: 40px;
-  border-radius: 3px;
-  user-select: none;
-}
-
-.label-icon {
-  float: left;
-  padding: 0 10px;
-  color: #F6F7F8;
-  background-color: #373C38;
-}
-
-.label-content {
-  float: left;
-  width: 70px;
-  text-align: center;
 }
