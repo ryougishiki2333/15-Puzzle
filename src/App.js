@@ -59,6 +59,7 @@ class App extends React.Component {
       emptyCoordinate: 8,
       width: 3,
       height: 3,
+      
     };
   }
 
@@ -129,6 +130,18 @@ class App extends React.Component {
     });
   };
 
+  changeWidth=(event)=>{
+    this.setState({width:event.target.value},this.restart)
+  }
+  
+  changeHeight=(event)=>{
+    this.setState({height:event.target.value},this.restart)
+  }
+
+  restart=()=>{
+    this.setState({ emptyCoordinate:this.state.height*this.state.width -1,piecesArray: this.initPiecesArray() }, this.shufflePuzzle);
+  }
+
   render() {
     return (
       <div className="puzzle">
@@ -138,17 +151,17 @@ class App extends React.Component {
           width={this.state.width}
           height={this.state.height}
         />
-
         <div className="choose">
-        <label for="width">width</label>
-          <select name="width" id="width">
+       
+        <label>选择width以全部重置</label>
+          <select value={this.state.width} onChange={this.changeWidth}>
             <option value="3">3</option>
             <option value="5">5</option>
             <option value="7">7</option>
             <option value="9">9</option>
           </select>
-          <label for="height">height</label>
-          <select name="height" id="height">
+          <label>选择height以全部重置</label>
+          <select value={this.state.height} onChange={this.changeHeight}>
             <option value="3">3</option>
             <option value="5">5</option>
             <option value="7">7</option>
